@@ -31,11 +31,11 @@ export default App;
 
 const StyledDiv = styled.div`
   @media (min-width: 375px) {
-    background: url("../public/assets/pattern-bg-mobile.png");
+    background: url("../assets/pattern-bg-mobile.png");
   }
 
   @media (min-width: 768px) {
-    background: url("../public/assets/pattern-bg-desktop.png");
+    background: url("../assets/pattern-bg-desktop.png");
   }
   height: 40vh;
 `;
