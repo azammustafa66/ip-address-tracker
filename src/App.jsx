@@ -4,7 +4,7 @@ import Map from "./components/Map";
 import { useState } from "react";
 
 const App = () => {
-  const [location, setLocation] = useState([34.04915, -118.09462]);
+  const [location, setLocation] = useState([19.03681, 73.01582]);
   return (
     <main className="h-screen">
       <Container>

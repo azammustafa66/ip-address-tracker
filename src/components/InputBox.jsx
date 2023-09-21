@@ -1,19 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { IP_ADDRESS, ISP, LOCATION, TIMEZONE } from "../utils/constants";
 import PropTypes from "prop-types";
 
 const InputBox = ({ setLocation }) => {
-  const [inputTerm, setInputTerm] = useState(IP_ADDRESS);
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => fetchData(), 300);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [inputTerm]);
+  const [inputTerm, setInputTerm] = useState("");
+  const [data, setData] = useState({});
 
   const fetchData = async () => {
     const key = import.meta.env.VITE_API_KEY;
@@ -30,35 +22,41 @@ const InputBox = ({ setLocation }) => {
     fetchData();
   };
 
-  let ip, region, city, postalCode, timezone, isp;
+  const handleValueChange = (searchTerm) => {
+    setInputTerm(searchTerm);
+  };
 
+  let ip, region, city, country, timezone, isp;
   if (data) {
     ip = data.ip;
     region = data.location?.region;
     city = data.location?.city;
-    postalCode = data.location?.postalCode;
+    country = data.location?.country;
     timezone = data.location?.timezone;
     isp = data.isp;
   }
 
+  const formattedLocation =
+    city && region && country ? `${city} ${region} ${country}` : LOCATION;
+
   return (
-    <StyledInputSection className="flex flex-col justify-center items-center gap-12">
+    <StyledInputSection className="flex flex-col justify-center items-center gap-4">
       <h1 className="text-3xl tracking-tight font-medium text-white">
         IP Address Tracker
       </h1>
       <div className="flex justify-center">
-        <form onSubmit={(event) => handleSubmit(event)}>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             className="md:w-[555px] w-[327px] h-12 rounded-l-2xl outline-none p-2"
             value={inputTerm}
-            onChange={(event) => setInputTerm(event.target.value)}
+            onChange={(event) => handleValueChange(event.target.value)}
           />
         </form>
         <button
           type="submit"
-          className="bg-black p-2 md:p-3 rounded-r-2xl hover:bg-[rgba(63, 63, 63, 1)]"
-          onClick={() => fetchData()}
+          className="bg-black p-4 md:p-3 rounded-r-2xl hover:bg-[rgba(63, 63, 63, 1)]"
+          onClick={fetchData}
         >
           <img
             src="../../assets/icon-arrow.svg"
@@ -68,22 +66,24 @@ const InputBox = ({ setLocation }) => {
         </button>
       </div>
 
-      <div className="h-72 md:h-44 xl:w-[1110px] flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-center md:justify-evenly bg-white rounded-2xl p-3 md:p-8">
-        <div className="relative border-custom p-4">
-          <StyledH1>ip address</StyledH1>
-          <P>{ip || IP_ADDRESS}</P>
-        </div>
-        <div className="relative border-custom p-4">
-          <StyledH1>location</StyledH1>
-          <P>{LOCATION || `${region} ${city} ${postalCode}`}</P>
-        </div>
-        <div className="relative border-custom p-4">
-          <StyledH1>Timezone</StyledH1>
-          <P>{timezone || TIMEZONE}</P>
-        </div>
-        <div className="p-4">
-          <StyledH1>ISP</StyledH1>
-          <P>{isp || ISP}</P>
+      <div className="h-60 md:h-44 md:w-[730px] xl:w-[1110px] flex flex-col md:flex-row gap-3 md:gap-8 items-center md:justify-evenly bg-white rounded-2xl p-4 md:p-10">
+        <div className="flex flex-col md:flex-row justify-evenly gap-y-3 md:gap-x-5 lg:gap-x-8 md:gap-y-0">
+          <div className="relative lg:border-custom lg:p-4">
+            <StyledH1>ip address</StyledH1>
+            <P>{ip || IP_ADDRESS}</P>
+          </div>
+          <div className="relative lg:border-custom lg:p-4">
+            <StyledH1>location</StyledH1>
+            <P>{formattedLocation}</P>
+          </div>
+          <div className="relative lg:border-custom lg:p-4">
+            <StyledH1>Timezone</StyledH1>
+            <P>{timezone || TIMEZONE}</P>
+          </div>
+          <div className="lg:p-4">
+            <StyledH1>ISP</StyledH1>
+            <P>{isp || ISP}</P>
+          </div>
         </div>
       </div>
     </StyledInputSection>
@@ -105,6 +105,7 @@ const StyledH1 = styled.h1`
   letter-spacing: 1.75px;
   text-transform: uppercase;
   opacity: 0.5;
+  margin-bottom: 2px;
 `;
 
 const P = styled.p`
@@ -119,8 +120,12 @@ const P = styled.p`
 
 const StyledInputSection = styled.section`
   position: absolute;
-  top: 10%;
+  top: 2.5%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
+
+  @media (min-width: 768px) {
+    top: 10%;
+  }
 `;
