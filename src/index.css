@@ -4,8 +4,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .border-custom::before {
+    content: "";
+    display: block;
+    height: 75px;
+    width: 1px;
+    background-color: #ccc;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+  }
+}
+
 :root {
-  font-family: "Rubik", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Rubik", sans-serif;
   line-height: 1.5;
 
   font-synthesis: none;
