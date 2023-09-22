@@ -48,7 +48,8 @@ const InputBox = ({ setLocation }) => {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            className="md:w-[555px] w-[327px] h-12 rounded-l-2xl outline-none p-2"
+            placeholder="Search for any IP address or domain"
+            className="md:w-[555px] w-[327px] h-12 rounded-l-2xl outline-none p-2 placeholder:text-[#2c2c2c] placeholder:text-xl placeholder:font-normal"
             value={inputTerm}
             onChange={(event) => handleValueChange(event.target.value)}
           />
